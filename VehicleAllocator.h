@@ -6,10 +6,13 @@ class VehicleAllocator
 private:
     Vehicle **vehicles;
     size_t size = 0;
-    Vehicle *createVehicle(const char *registration, const char *description, std::size_t space);
+    
 
 public:
-    VehicleAllocator(size_t size);
+    VehicleAllocator();
     ~VehicleAllocator();
     Vehicle& operator[](size_t index);
+    Vehicle* createVehicle();
+    void set_size(size_t size);
+    void allocate();
 };

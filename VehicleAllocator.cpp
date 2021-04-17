@@ -1,34 +1,48 @@
 #include "VehicleAllocator.h"
 
-VehicleAllocator::VehicleAllocator(size_t size)
+VehicleAllocator::VehicleAllocator()
 {
-    this->size = size;
+    this->size = 0;
 
-    vehicles = new Vehicle *[size];
-    for (size_t i = 0; i < size; i++)
-    {
-        std::cout << "Enter vehicle registration: ";
-        MyString registration = read_string();
-
-        std::cout << "\nEnter vehicle description: ";
-        MyString description = read_string();
-
-        std::cout << "\nEnter how many spaces dose the vehicle take: ";
-        size_t space;
-        std::cin >> space;
-
-        this->vehicles[i] = createVehicle(registration.c_str(), description.c_str(), space);
-    }
+    this->vehicles = nullptr;
 }
 VehicleAllocator::~VehicleAllocator()
 {
+    for (size_t i = 0; i < this->size; i++)
+    {
+        delete this->vehicles[i];
+    }
+
     delete[] this->vehicles;
 }
-Vehicle *VehicleAllocator::createVehicle(const char *registration, const char *description, std::size_t space)
+Vehicle *VehicleAllocator::createVehicle()
 {
-    Vehicle *vehicleptr = new Vehicle(registration, description, space);
+    std::cout << "Enter vehicle registration: ";
+    MyString registration = read_string();
+
+    std::cout << "\nEnter vehicle description: ";
+    MyString description = read_string();
+
+    std::cout << "\nEnter how many spaces dose the vehicle take: ";
+    size_t space;
+    std::cin >> space;
+    Vehicle *vehicleptr = new Vehicle(registration.c_str(), description.c_str(), space);
 
     return vehicleptr;
+}
+
+void VehicleAllocator::set_size(size_t size)
+{
+    this->size = size;
+    this->vehicles = new Vehicle *[size];
+}
+
+void VehicleAllocator::allocate()
+{
+    for (size_t i = 0; i < this->size; i++)
+    {
+        this->vehicles[i] = createVehicle();
+    }
 }
 
 Vehicle &VehicleAllocator::operator[](size_t index)
